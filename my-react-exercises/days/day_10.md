@@ -1,0 +1,1 @@
+Day 10 Complete: Transferred all components into seperate files and fixed folder structure.
