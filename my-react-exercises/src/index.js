@@ -1,333 +1,300 @@
-// index.js
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  NavLink,
+  Redirect,
+  Prompt,
+} from 'react-router-dom'
 
-const options = [
+// Home component
+const Home = (props) => <h1>Welcome Home</h1>
+// About component
+const About = (props) => <h1>About Us</h1>
+// Contact component
+const Contact = (props) => <h1>Contact us</h1>
+// Challenge component
+
+const challenges = [
   {
-    value: '',
-    label: '-- Select Country--',
+    name: '30 Days Of Python',
+    description:
+      '30 Days of Python challenge is a step by step guide to learn Python in 30 days.',
+    status: 'completed',
+    days: 30,
+    level: 'Beginners to Advanced',
+    duration: '20 Nov 2019 - 20 Dec 2019',
+    slug: 'pyhton',
+    url:
+      'https://github.com/https://https://github.com/Asabeneh/30-Days-Of-Python.com/Asabeneh/30-Days-Of-JavaScript/30-Days-Of-React',
+    author: {
+      firstName: 'Asabeneh',
+      lastName: 'Yetayeh',
+    },
   },
   {
-    value: 'Finland',
-    label: 'Finland',
+    name: '30 Days Of JavaScript',
+    description:
+      '30 Days of JavaScript challenge is a step by step guide to learn JavaScript in 30 days.',
+    status: 'completed',
+    days: 30,
+    level: 'Beginners to Advanced',
+    duration: '1 Jan 2020 - 30 Jan 2020',
+    slug: 'javascript',
+    url: 'https://github.com/Asabeneh/30-Days-Of-JavaScript',
+    author: {
+      firstName: 'Asabeneh',
+      lastName: 'Yetayeh',
+    },
   },
   {
-    value: 'Sweden',
-    label: 'Sweden',
+    name: '30 Days Of React',
+    description:
+      '30 Days of React challenge is a step by step guide to learn React in 30 days.',
+    status: 'ongoing',
+    days: 30,
+    level: 'Beginners to Advanced',
+    duration: '1 Oct 2020- 30 Oct 2020',
+    slug: 'react',
+    url: 'https://github.com/Asabeneh/30-Days-Of-React',
+    author: {
+      firstName: 'Asabeneh',
+      lastName: 'Yetayeh',
+    },
   },
   {
-    value: 'Norway',
-    label: 'Norway',
+    name: '30 HTML and CSS',
+    description:
+      '30 Days of HTML and CSS challenge is a step by step guide to learn HTML and CSS in 30 days.',
+
+    status: 'coming',
+    days: 30,
+    level: 'Beginners to Advanced',
+    duration: '',
+    slug: 'html-and-css',
+    url: '',
+    author: {
+      firstName: 'Asabeneh',
+      lastName: 'Yetayeh',
+    },
   },
   {
-    value: 'Denmark',
-    label: 'Denmark',
+    name: '30 ReactNative',
+    description:
+      '30 Days of ReactNative challenge is a step by step guide to learn ReactNative in 30 days.',
+    status: 'coming',
+    days: 30,
+    level: 'Beginners to Advanced',
+    duration: '',
+    slug: 'reactnative',
+    url: '',
+    author: {
+      firstName: 'Asabeneh',
+      lastName: 'Yetayeh',
+    },
+  },
+  {
+    name: '30 Data Analysis',
+    description:
+      '30 Days of Data Analysis challenge  is a step by step guide to learn about data, data visualization and data analysis in 30 days.',
+    status: 'coming',
+    days: 30,
+    level: 'Beginners to Advanced',
+    duration: '',
+    slug: 'data-analysis',
+    url: '',
+    author: {
+      firstName: 'Asabeneh',
+      lastName: 'Yetayeh',
+    },
+  },
+  {
+    name: '30 Machine Learning',
+    description:
+      '30 Days of Machine learning challenge  is a step by step guide to learn data cleaning, machine learning models and predictions in 30 days.',
+    status: 'coming',
+    days: 30,
+    level: 'Beginners to Advanced',
+    duration: '',
+    slug: 'machine-learning',
+    url: '',
+    author: {
+      firstName: 'Asabeneh',
+      lastName: 'Yetayeh',
+    },
   },
 ]
 
-// mapping the options to list(array) of JSX options
+const Challenge = ({
+  challenge: {
+    name,
+    description,
+    status,
+    days,
+    level,
+    duration,
+    author: { firstName, lastName },
+  },
+}) => (
+  <div>
+    <h1>{name}</h1>
+    <p>{level}</p>
+    <p>
+      Author: {firstName} {lastName}
+    </p>
+    {duration && (
+      <>
+        {' '}
+        <small>{duration}</small> <br />
+      </>
+    )}
+    <small>Number of days: {days}</small>
 
-const selectOptions = options.map(({ value, label }) => (
-  <option value={value}> {label}</option>
-))
+    <p>{description}</p>
+  </div>
+)
 
+const Challenges = (props) => {
+  const path = props.location.pathname
+  const slug = path.split('/').slice(path.split('/').length - 1)[0]
+  const challenge = challenges.find((challenge) => challenge.slug === slug)
+
+  return (
+    <div>
+      <h1>30 Days Of React Challenge</h1>
+      <ul>
+        {challenges.map(({ name, slug }) => (
+          <li>
+            <NavLink to={`/challenges/${slug}`}>{name}</NavLink>
+          </li>
+        ))}
+      </ul>
+      <Switch>
+        <Route
+          exact
+          path={'/challenges'}
+          component={() => <h1>Choose any of the challenges</h1>}
+        />
+        <Route
+          path={path}
+          component={(props) => <Challenge challenge={challenge} />}
+        />
+      </Switch>
+    </div>
+  )
+}
+
+const NotFound = (props) => <h1>The page your looking for not found</h1>
+const Navbar = ({ username }) => (
+  <ul>
+    <li>
+      <NavLink to='/'>Home</NavLink>
+    </li>
+    <li>
+      <NavLink to='/about'>About</NavLink>
+    </li>
+    <li>
+      <NavLink to='/contact'>Contact</NavLink>
+    </li>
+    <li>
+      <NavLink to={`/user/${username}`}>User</NavLink>
+    </li>
+    <li>
+      <NavLink to='/challenges'>Challenges</NavLink>
+    </li>
+  </ul>
+)
+
+const User = ({ match, isLoggedIn, handleLogin }) => {
+  const username = match.params.username
+  return (
+    <div>
+      {isLoggedIn ? (
+        <>
+          <h1>Welcome {username} to the challenge</h1>
+          <small>Now, you can navigate through all the challenges</small> <br />
+        </>
+      ) : (
+        <p>Please login in to access the challenges </p>
+      )}
+      <button onClick={handleLogin}>{isLoggedIn ? 'Logout' : 'Login'}</button>
+    </div>
+  )
+}
+
+const Welcome = ({ handleLogin, isLoggedIn }) => {
+  return (
+    <div>
+      {isLoggedIn ? 'Welcome to the challenge' : <p>Please login in </p>}
+      <button onClick={handleLogin}>{isLoggedIn ? 'Logout' : 'Login'}</button>
+    </div>
+  )
+}
 class App extends Component {
-  // declaring state
   state = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    country: '',
-    tel: '',
-    dateOfBirth: '',
-    favoriteColor: '',
-    weight: '',
-    gender: '',
-    file: '',
-    bio: '',
-    skills: {
-      html: false,
-      css: false,
-      javascript: false,
-    },
-    touched: {
-      firstName: false,
-      lastName: false,
-    },
+    isLoggedIn: false,
+    firstName: 'Asabeneh',
   }
-  handleChange = (e) => {
-    /*
-     we can get the name and value like: e.target.name, e.target.value
-    Wwe can also destructure name and value from e.target
-    const name = e.target.name
-    const value = e.target.value
-    */
-    const { name, value, type, checked } = e.target
-    /*
-    [variablename] we can make a value stored in a certain variable could be a key for an object, in this case a key for the state
-    */
-
-    if (type === 'checkbox') {
-      this.setState({
-        skills: { ...this.state.skills, [name]: checked },
-      })
-    } else if (type === 'file') {
-      this.setState({ [name]: e.target.files[0] })
-    } else {
-      this.setState({ [name]: value })
-    }
+  handleLogin = () => {
+    this.setState({
+      isLoggedIn: !this.state.isLoggedIn,
+    })
   }
-  handleBlur = (e) => {
-    const { name, value } = e.target
-    this.setState({ touched: { ...this.state.touched, [name]: true } })
-  }
-  validate = () => {
-    // Object to collect error feedback and to display on the form
-    const errors = {
-      firstName: '',
-    }
-
-    if (
-      (this.state.touched.firstName && this.state.firstName.length < 3) ||
-      (this.state.touched.firstName && this.state.firstName.length > 12)
-    ) {
-      errors.firstName = 'First name must be between 2 and 12'
-    }
-    return errors
-  }
-  handleSubmit = (e) => {
-    /*
-      e.preventDefault()
-      stops the default behavior of form element 
-      specifically refreshing of page
-      */
-    e.preventDefault()
-
-    const {
-      firstName,
-      lastName,
-      email,
-      country,
-      gender,
-      tel,
-      dateOfBirth,
-      favoriteColor,
-      weight,
-      bio,
-      file,
-      skills,
-    } = this.state
-
-    const formattedSkills = []
-    for (const key in skills) {
-      console.log(key)
-      if (skills[key]) {
-        formattedSkills.push(key.toUpperCase())
-      }
-    }
-    const data = {
-      firstName,
-      lastName,
-      email,
-      country,
-      gender,
-      tel,
-      dateOfBirth,
-      favoriteColor,
-      weight,
-      bio,
-      file,
-      skills: formattedSkills,
-    }
-    /*
-     the is the place where we connect backend api
-      to send the data to the database
-      */
-    console.log(data)
-  }
-
   render() {
-    // accessing the state value by destrutcturing the state
-    // the noValidate attribute on the form is to stop the HTML5 built-in validation
-
-    const { firstName } = this.validate()
     return (
-      <div className='App'>
-        <h3>Add Student</h3>
-        <form onSubmit={this.handleSubmit} noValidate>
-          <div className='row'>
-            <div className='form-group'>
-              <label htmlFor='firstName'>First Name </label>
-              <input
-                type='text'
-                name='firstName'
-                value={this.state.firstName}
-                onChange={this.handleChange}
-                onBlur={this.handleBlur}
-                placeholder='First Name'
-              /> <br />
-              <small>{firstName}</small>
-            </div>
-            <div className='form-group'>
-              <label htmlFor='lastName'>Last Name </label>
-              <input
-                type='text'
-                name='lastName'
-                value={this.state.lastName}
-                onChange={this.handleChange}
-                placeholder='Last Name'
-              />
-            </div>
-            <div className='form-group'>
-              <label htmlFor='email'>Email </label>
-              <input
-                type='email'
-                name='email'
-                value={this.state.email}
-                onChange={this.handleChange}
-                placeholder='Email'
-              />
-            </div>
-          </div>
+      <Router>
+        <div className='App'>
+          <Navbar username={this.state.firstName} />
 
-          <div className='form-group'>
-            <label htmlFor='tel'>Telephone </label>
-            <input
-              type='tel'
-              name='tel'
-              value={this.state.tel}
-              onChange={this.handleChange}
-              placeholder='Tel'
-            />
-          </div>
+          <Prompt
+            message={({ pathname }) => {
+              return this.state.isLoggedIn &&
+                pathname.includes('/user/Asabeneh')
+                ? 'Are you sure you want to logout?'
+                : true
+            }}
+          />
 
-          <div className='form-group'>
-            <label htmlFor='dateOfBirth'>Date of birth </label>
-            <input
-              type='date'
-              name='dateOfBirth'
-              value={this.state.dateOfBirth}
-              onChange={this.handleChange}
-              placeholder='Date of Birth'
+          <Switch>
+            <Route path='/about' component={About} />
+            <Route path='/contact' component={Contact} />
+            <Route
+              path='/user/:username'
+              component={(props) => (
+                <User
+                  {...props}
+                  isLoggedIn={this.state.isLoggedIn}
+                  handleLogin={this.handleLogin}
+                />
+              )}
             />
-          </div>
-          <div className='form-group'>
-            <label htmlFor='favoriteColor'>Favorite Color</label>
-            <input
-              type='color'
-              id='favoriteColor'
-              name='favoriteColor'
-              value={this.state.favoriteColor}
-              onChange={this.handleChange}
-              placeholder='Favorite Color'
+            <Route
+              path='/login'
+              component={(props) => (
+                <Welcome
+                  {...props}
+                  isLoggedIn={this.state.isLoggedIn}
+                  handleLogin={this.handleLogin}
+                />
+              )}
             />
-          </div>
-          <div className='form-group'>
-            <label htmlFor='weight'>Weight </label>
-            <input
-              type='number'
-              id='weight'
-              name='weight'
-              value={this.state.weight}
-              onChange={this.handleChange}
-              placeholder='Weight in Kg'
+            <Route
+              path='/challenges'
+              component={(props) => {
+                return this.state.isLoggedIn ? (
+                  <Challenges {...props} />
+                ) : (
+                  <Redirect to='/user/asabeneh' />
+                )
+              }}
             />
-          </div>
-          <div>
-            <label htmlFor='country'>Country</label> <br />
-            <select name='country' onChange={this.handleChange} id='country'>
-              {selectOptions}
-            </select>
-          </div>
-
-          <div>
-            <p>Gender</p>
-            <div>
-              <input
-                type='radio'
-                id='female'
-                name='gender'
-                value='Female'
-                onChange={this.handleChange}
-                checked={this.state.gender === 'Female'}
-              />
-              <label htmlFor='female'>Female</label>
-            </div>
-            <div>
-              <input
-                id='male'
-                type='radio'
-                name='gender'
-                value='Male'
-                onChange={this.handleChange}
-                checked={this.state.gender === 'Male'}
-              />
-              <label htmlFor='male'>Male</label>
-            </div>
-            <div>
-              <input
-                id='other'
-                type='radio'
-                name='gender'
-                value='Other'
-                onChange={this.handleChange}
-                checked={this.state.gender === 'Other'}
-              />
-              <label htmlFor='other'>Other</label>
-            </div>
-          </div>
-
-          <div>
-            <p>Select your skills</p>
-            <div>
-              <input
-                type='checkbox'
-                id='html'
-                name='html'
-                onChange={this.handleChange}
-              />
-              <label htmlFor='html'>HTML</label>
-            </div>
-            <div>
-              <input
-                type='checkbox'
-                id='css'
-                name='css'
-                onChange={this.handleChange}
-              />
-              <label htmlFor='css'>CSS</label>
-            </div>
-            <div>
-              <input
-                type='checkbox'
-                id='javascript'
-                name='javascript'
-                onChange={this.handleChange}
-              />
-              <label htmlFor='javascript'>JavaScript</label>
-            </div>
-          </div>
-          <div>
-            <label htmlFor='bio'>Bio</label> <br />
-            <textarea
-              id='bio'
-              name='bio'
-              value={this.state.bio}
-              onChange={this.handleChange}
-              cols='120'
-              rows='10'
-              placeholder='Write about yourself ...'
-            />
-          </div>
-
-          <div>
-            <input type='file' name='file' onChange={this.handleChange} />
-          </div>
-          <div>
-            <button>Submit</button>
-          </div>
-        </form>
-      </div>
+            <Route exact path='/' component={Home} />
+            <Route component={NotFound} />
+          </Switch>
+        </div>
+      </Router>
     )
   }
 }
